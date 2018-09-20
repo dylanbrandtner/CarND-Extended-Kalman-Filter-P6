@@ -63,6 +63,13 @@ public:
    * @param z The measurement at k+1
    */
   void UpdateEKF(const Eigen::VectorXd &z);
+  
+    /**
+   * Updates the state using Kalman Filter equations
+   * @param y The measurement minus the prediction
+   */
+  void UpdateHelper(const Eigen::VectorXd &y);
+  
 
 };
 
