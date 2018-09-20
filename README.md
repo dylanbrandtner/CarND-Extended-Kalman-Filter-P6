@@ -5,7 +5,9 @@
 [image2]: ./KalmanFilterAlgo.png  "kalman"
 [image3]: ./Missing_normalize.png  "Normalize"
 
-The overall goal of this project is to utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. The kalman filter is then run against a simulator to predict the motion of a car.  The simulator can be found [here].(https://github.com/udacity/self-driving-car-sim/releases/). Lidar measurements are red circles and radar measurements are blue circles with an arrow pointing in the direction of the observed angle.  The path of the car is predetermined by the input data set, and the green triangles are the predicted path from the kalman filter.  Here is a snapshot of my final result:
+The overall goal of this project is to utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. 
+
+The kalman filter is run against a simulator to predict the motion of a car.  The simulator can be found [here](https://github.com/udacity/self-driving-car-sim/releases/). Lidar measurements are red circles and radar measurements are blue circles with an arrow pointing in the direction of the observed angle.  The path of the car is predetermined by the input data set, and the green triangles are the predicted path from the kalman filter.  Here is a snapshot of my final result:
 
 ![alt text][image1]
 
@@ -17,11 +19,9 @@ The overall goal of this project is to utilize a kalman filter to estimate the s
 
 The main program can be built and run by doing the following from the project top directory.
 
-1. mkdir build
-2. cd build
-3. cmake ..
-4. make
-5. ./ExtendedKF
+1. mkdir build && cd build
+2. cmake .. && make
+3. ./ExtendedKF
 
 ### Accuracy
 
@@ -58,13 +58,13 @@ Lidar measurements use standard kalman filter equations to update states within 
 Radar uses _extended_ kalman filter equations to update states within the 'UpdateEKF()' function.  For this, stored state data is  first converted to polar so that it can be compared against the new measurements (which are in polar coordinates).  Also, for an _extended_ kalman filter, the measurement matrix is a Jacobian matrix calculated in the 'CalculateJacobian()' function of the 'Tools' class.
 
 ### Code Efficiency
-Algorithm does not need to sacrifice comprehension, stability, robustness or security for speed, while still maintaining good practice with respect to calculations (ex. avoided calling angle normalization in 'UpdateEKF()' unless angle was outside expected range, and avoided divide by zero in all cases).  Avoided code duplication where possible (ex. created 'UpdateHelper() function in 'KalmanFilter' class to avoid duplicate update/estimation code).
+Algorithm does not sacrifice comprehension, stability, robustness or security for speed, while still maintaining good practice with respect to calculations.  For example, I only call angle normalization in 'UpdateEKF()' if the angle was outside expected range, and I avoid divide by zero in all cases.  I also avoided code duplication where possible.  For example, I added an 'UpdateHelper() function in the 'KalmanFilter' class to avoid duplicate update/estimation calculation code.
 
 ## Discussion
-This project was less work intensive than previous ones as most of the framework was already setup in the sample code and in the previous lesson materials.  However, for Radar measurements in particular, there were a few details to work out that required me to understand the general concepts.  For example, conversion of the polar coordinates to cartesian in the initial measurement required going back to the basic trigonometry lesson.  
+This project was less work intensive than previous ones as most of the framework was already setup in the sample code and in the previous lesson materials.  However, for Radar measurements in particular, there were a few details to work out that required me to understand several of the overall concepts.  For example, conversion of the polar coordinates to cartesian in the initial measurement required going back to the basic trigonometry lesson.  
 
 One thing that tripped me up was the normalization of the angle in y measurement.  This was mentioned in the "Tips and tricks" for the project, but I missed it during my first implementation.  Thus, my first attempt showed the following path when the turn angle switched from left to right at the middle of the test:
 
 ![alt text][image3]
 
-I added some additional debugging to understand what was happening at this step.  I noticed my bearing measurement had switched from negative to positive (i.e. from turning left to turning right), which caused the difference between the last and current measurement to be larger than π.  As noticed in the "Tips and tricks", the Kalman filter expects small angle value differences between -π  and π .  Thus, I normalized the bearing portion of the "y" vector using atan2().  This fixed the issue at this point in the car's path, as seen in the final video.
+As is clear in the image, the y value of the prediction jumps sharply and then slowly recovers.  I added some additional debugging to understand what was happening at this step.  I noticed the bearing measurement switched from negative to positive (i.e. from turning left to turning right) at this point, which caused the difference between the last and current measurement to be larger than π.  As noticed in the "Tips and tricks", the Kalman filter expects small angle value differences between -π  and π .  Thus, I normalized the bearing portion of the "y" vector using atan2(), such that it would remain in the expected range.  This fixed the faulty prediction here, as seen in the final video.
