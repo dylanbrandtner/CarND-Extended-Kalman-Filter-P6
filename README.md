@@ -5,7 +5,7 @@
 [image2]: ./KalmanFilterAlgo.png  "kalman"
 [image3]: ./Missing_normalize.png  "Normalize"
 
-The overall goal of this project is to utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. The kalman filter is then run against a simulator to predict the motion of a car.  Lidar measurements are red circles and radar measurements are blue circles with an arrow pointing in the direction of the observed angle.  The path of the car is predetermined by the input data set, and the green triangles are the predicted path from the kalman filter.  Here is a snapshot of my final result:
+The overall goal of this project is to utilize a kalman filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. The kalman filter is then run against a simulator to predict the motion of a car.  The simulator can be found [here].(https://github.com/udacity/self-driving-car-sim/releases/). Lidar measurements are red circles and radar measurements are blue circles with an arrow pointing in the direction of the observed angle.  The path of the car is predetermined by the input data set, and the green triangles are the predicted path from the kalman filter.  Here is a snapshot of my final result:
 
 ![alt text][image1]
 
@@ -13,6 +13,7 @@ The overall goal of this project is to utilize a kalman filter to estimate the s
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ### Compiling
+
 
 The main program can be built and run by doing the following from the project top directory.
 
@@ -25,6 +26,7 @@ The main program can be built and run by doing the following from the project to
 ### Accuracy
 
 The rubric specifies the maximum RMSE values for each measurement. My final RSME values vs. the limits were as follows:
+
 | Measurement | Max RSME | Measured RSME  |
 |:-----------:|:--------:|:--------------:|
 |     px      |   0.11   |     0.0973     |
